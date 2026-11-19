@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tiffgetter.local/contract/v1/metadata.schema.json",
+  "title": "ReleaseMetadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source",
+    "release_id",
+    "release_date",
+    "attribution",
+    "metadata_source",
+    "metadata_fetched_at",
+    "lat",
+    "lon",
+    "zoom",
+    "buffer",
+    "bounds",
+    "created_at",
+    "files",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["wayback", "esri", "bing", "osm", "google"]
+    },
+    "release_id": {
+      "type": ["string", "null"]
+    },
+    "release_date": {
+      "type": ["string", "null"]
+    },
+    "attribution": {
+      "type": "string"
+    },
+    "metadata_source": {
+      "type": "string"
+    },
+    "metadata_fetched_at": {
+      "type": "string"
+    },
+    "lat": {
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90
+    },
+    "lon": {
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180
+    },
+    "zoom": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20
+    },
+    "buffer": {
+      "type": "integer",
+      "minimum": 50,
+      "maximum": 5000
+    },
+    "bounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min_lon", "min_lat", "max_lon", "max_lat"],
+      "properties": {
+        "min_lon": {
+          "type": "number"
+        },
+        "min_lat": {
+          "type": "number"
+        },
+        "max_lon": {
+          "type": "number"
+        },
+        "max_lat": {
+          "type": "number"
+        }
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["png", "tif"],
+      "properties": {
+        "png": {
+          "type": "string"
+        },
+        "tif": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "diagnostics": {
+      "$ref": "#/$defs/diagnostics"
+    }
+  },
+  "$defs": {
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "http_status", "url", "detail"],
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "http_status": {
+          "type": ["integer", "null"]
+        },
+        "url": {
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        }
+      }
+    },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["by_kind", "failed_tiles", "samples"],
+      "properties": {
+        "by_kind": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "failed_tiles": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "samples": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sample"
+          }
+        }
+      }
+    }
+  }
+}

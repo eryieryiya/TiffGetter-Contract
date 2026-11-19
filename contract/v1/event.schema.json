@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tiffgetter.local/contract/v1/event.schema.json",
+  "title": "Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "schema_version", "job_id", "sequence", "timestamp", "item"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["log", "progress", "date_result", "coordinate_result", "run_summary"]
+    },
+    "schema_version": {
+      "const": "1.0"
+    },
+    "job_id": {
+      "type": "string"
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "item": {
+      "type": "object"
+    }
+  }
+}

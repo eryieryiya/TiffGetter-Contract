@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tiffgetter.local/contract/v1/fetch_result.schema.json",
+  "title": "FetchResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "status",
+    "exit_code",
+    "started_at",
+    "finished_at",
+    "items",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["success", "partial", "failed", "cancelled"]
+    },
+    "exit_code": {
+      "type": "integer",
+      "enum": [0, 2, 3, 4, 5, 6]
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/item"
+      }
+    },
+    "diagnostics": {
+      "$ref": "#/$defs/diagnostics"
+    }
+  },
+  "$defs": {
+    "failure_kind": {
+      "type": ["string", "null"],
+      "enum": [
+        "no_releases",
+        "out_of_range",
+        "network",
+        "timeout",
+        "tls",
+        "http_error",
+        "forbidden",
+        "rate_limited",
+        "server",
+        "blocked",
+        "invalid_content",
+        "incomplete_tiles",
+        "interface_changed",
+        "internal",
+        "cancelled",
+        null
+      ]
+    },
+    "bounds": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["min_lon", "min_lat", "max_lon", "max_lat"],
+      "properties": {
+        "min_lon": {
+          "type": "number"
+        },
+        "min_lat": {
+          "type": "number"
+        },
+        "max_lon": {
+          "type": "number"
+        },
+        "max_lat": {
+          "type": "number"
+        }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["png", "tif", "metadata"],
+      "properties": {
+        "png": {
+          "type": ["string", "null"]
+        },
+        "tif": {
+          "type": ["string", "null"]
+        },
+        "metadata": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "http_status", "url", "detail"],
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "http_status": {
+          "type": ["integer", "null"]
+        },
+        "url": {
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        }
+      }
+    },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["by_kind", "failed_tiles", "samples"],
+      "properties": {
+        "by_kind": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "failed_tiles": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "samples": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sample"
+          }
+        }
+      }
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "point_id",
+        "point_name",
+        "date",
+        "release_id",
+        "status",
+        "failure_kind",
+        "detail",
+        "effective_zoom",
+        "assets",
+        "bounds",
+        "diagnostics",
+        "metadata_source",
+        "metadata_fetched_at"
+      ],
+      "properties": {
+        "point_id": {
+          "type": "string"
+        },
+        "point_name": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "release_id": {
+          "type": ["string", "null"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["success", "existing", "duplicate", "failed"]
+        },
+        "failure_kind": {
+          "$ref": "#/$defs/failure_kind"
+        },
+        "detail": {
+          "type": ["string", "null"]
+        },
+        "effective_zoom": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "assets": {
+          "$ref": "#/$defs/assets"
+        },
+        "bounds": {
+          "$ref": "#/$defs/bounds"
+        },
+        "diagnostics": {
+          "$ref": "#/$defs/diagnostics"
+        },
+        "metadata_source": {
+          "type": ["string", "null"]
+        },
+        "metadata_fetched_at": {
+          "type": ["string", "null"]
+        }
+      }
+    }
+  }
+}

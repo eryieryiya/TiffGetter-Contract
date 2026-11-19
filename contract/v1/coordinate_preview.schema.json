@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tiffgetter.local/contract/v1/coordinate_preview.schema.json",
+  "title": "CoordinatePreview",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "path", "format", "total", "points"],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "path": {
+      "type": "string"
+    },
+    "format": {
+      "type": "string",
+      "enum": ["csv", "shp"]
+    },
+    "total": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "points": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/point"
+      }
+    }
+  },
+  "$defs": {
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "lat", "lon"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "lon": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        }
+      }
+    }
+  }
+}

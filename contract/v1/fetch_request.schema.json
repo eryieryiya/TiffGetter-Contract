@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tiffgetter.local/contract/v1/fetch_request.schema.json",
+  "title": "FetchRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "request_id", "source", "points", "options", "output"],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "request_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "string",
+      "enum": ["wayback", "esri", "bing", "osm", "google"]
+    },
+    "points": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/point"
+      }
+    },
+    "options": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["zoom", "buffer_radius_m", "date_start", "date_end", "dedup", "coord_concurrency"],
+      "properties": {
+        "zoom": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "buffer_radius_m": {
+          "type": "integer",
+          "minimum": 50,
+          "maximum": 5000
+        },
+        "date_start": {
+          "type": ["string", "null"],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "date_end": {
+          "type": ["string", "null"],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "dedup": {
+          "type": "boolean",
+          "default": true
+        },
+        "coord_concurrency": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root", "layout"],
+      "properties": {
+        "root": {
+          "type": ["string", "null"]
+        },
+        "layout": {
+          "type": "string",
+          "enum": ["auto", "explicit"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "layout": {
+                "const": "explicit"
+              }
+            },
+            "required": ["layout"]
+          },
+          "then": {
+            "required": ["root"],
+            "properties": {
+              "root": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "options": {
+            "properties": {
+              "date_start": {
+                "type": "string"
+              }
+            },
+            "required": ["date_start"]
+          }
+        },
+        "required": ["options"]
+      },
+      "then": {
+        "properties": {
+          "options": {
+            "properties": {
+              "date_end": {
+                "type": "string"
+              }
+            },
+            "required": ["date_end"]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "lat", "lon"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "lon": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        }
+      }
+    }
+  }
+}

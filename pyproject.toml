@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tiffgetter"
+version = "0.1.0"
+description = "TiffGetter v1 contract types and headless imagery fetch library"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+dependencies = [
+    "requests>=2.31",
+    "urllib3>=2.0",
+    "Pillow>=10.0",
+    "numpy>=1.24",
+    "pyshp>=2.3",
+    "pyproj>=3.5",
+]
+
+[project.optional-dependencies]
+geotiff = ["rasterio>=1.3"]
+
+[tool.setuptools]
+packages = ["tiffgetter", "core", "providers", "utils"]
+py-modules = ["coordinate_loader", "config"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+python_files = ["test_*.py"]

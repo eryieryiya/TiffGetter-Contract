@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tiffgetter.local/contract/v1/source_info.schema.json",
+  "title": "SourceInfo",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "display_name",
+    "supports_history",
+    "min_zoom",
+    "max_zoom",
+    "max_concurrency",
+    "attribution",
+    "experimental",
+    "usage_note",
+    "verify_tls"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": ["wayback", "esri", "bing", "osm", "google"]
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "supports_history": {
+      "type": "boolean"
+    },
+    "min_zoom": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20
+    },
+    "max_zoom": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20
+    },
+    "max_concurrency": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "attribution": {
+      "type": "string"
+    },
+    "experimental": {
+      "type": "boolean"
+    },
+    "usage_note": {
+      "type": "string"
+    },
+    "verify_tls": {
+      "type": "boolean"
+    }
+  }
+}
