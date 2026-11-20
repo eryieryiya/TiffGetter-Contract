@@ -10,7 +10,7 @@ pip install -e .
 pip install -e ".[geotiff]"
 ```
 
-`rasterio` 是可选依赖；缺失时抓取仍会输出 PNG，`assets.tif` 为 `null`。
+`rasterio` 是可选依赖；缺失时抓取仍会输出 PNG，`assets.tif` 为 `null`。安装后库会自动使用 rasterio 自带的 PROJ/GDAL 数据，避免系统 PostgreSQL/PostGIS 的 `proj.db` 版本冲突。
 
 ## 调用示例
 
